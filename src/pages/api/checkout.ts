@@ -5,6 +5,7 @@ import { stripe } from "../../../lib/stripe";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     const { priceId } = req.body;
+    console.log(priceId, '--> teste')
 
     if (req.method !== 'POST') {
         return res.status(405).json({ error: 'Method now allowed.' })

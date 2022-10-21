@@ -3,9 +3,10 @@ import { GetStaticPaths, GetStaticProps } from "next"
 import Image from "next/future/image";
 import Head from "next/head";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import Stripe from "stripe"
 import { stripe } from "../../../lib/stripe"
+import { PurchaseContext } from "../../context/purchase";
 import { ImageContainer, ProductContainer, ProductDetails } from "../../styles/pages/product"
 
 
@@ -17,6 +18,7 @@ interface ProductProps {
         price: string;
         description: string;
         defaultPriceId: string;
+        priceNumberType: number;
     }
 }
 
@@ -24,6 +26,12 @@ export default function Product({ product }: ProductProps) {
     const [isCreatingCheckoutSession, setIsCreatingCheckoutSession] = useState(false);
 
     const { isFallback } = useRouter()
+
+    const { cart, addToCart, total } = useContext(PurchaseContext)
+
+    const handleAddToCart = () => {
+        addToCart({ ...product, quantity: 1 });
+    }
 
     //const router = useRouter() --> se fosse reidirecionar para uma pagina dentro  da app
 
@@ -70,7 +78,7 @@ export default function Product({ product }: ProductProps) {
 
                     <p>{product.description}</p>
 
-                    <button disabled={isCreatingCheckoutSession} onClick={handleBuyProduct}>
+                    <button disabled={isCreatingCheckoutSession} onClick={handleAddToCart}>
                         Comprar agora
                     </button>
                 </ProductDetails>
@@ -105,6 +113,7 @@ export const getStaticProps: GetStaticProps<any, { id: string }> = async ({ para
                 id: product.id,
                 name: product.name,
                 imageUrl: product.images[0],
+                priceNumberType: price.unit_amount,
                 price: new Intl.NumberFormat('pt-BR', {
                     style: 'currency',
                     currency: 'BRL',

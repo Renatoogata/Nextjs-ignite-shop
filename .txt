@@ -1,0 +1,2 @@
+1- Conseguir mandar um array de id para o stripe conseguir fazer o checkout com mais de 1 carrinho, ok
+2- Contexto para que eu consiga fazer um carrinho na minha aplicação antes de enviar a requisição para o stripe,
