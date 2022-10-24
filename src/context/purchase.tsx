@@ -16,6 +16,7 @@ interface PurchaseContextProps {
     cart: ProductType[];
     total: number;
     addToCart: (product: ProductType) => void;
+    removeFromCart: (id: string) => void;
 }
 
 interface PurchaseContextProviderProps {
@@ -40,6 +41,19 @@ export const PurchaseProvider = ({
                     }
                 }
 
+                case 'REMOVE_FROM_CART': {
+                    const { cart } = state;
+
+                    const newCart = cart.filter((product: ProductType) => {
+                        return product.id !== action.payload.id;
+                    });
+
+                    return {
+                        cart: newCart,
+                    }
+
+                }
+
                 default:
                     return state;
             }
@@ -60,9 +74,18 @@ export const PurchaseProvider = ({
         });
     };
 
+    const removeFromCart = (id: string) => {
+        dispatch({
+            type: 'REMOVE_FROM_CART',
+            payload: {
+                id,
+            }
+        })
+    }
+
     return (
         <PurchaseContext.Provider
-            value={{ cart, addToCart, total }}
+            value={{ cart, addToCart, total, removeFromCart }}
         >
             {children}
         </PurchaseContext.Provider>
