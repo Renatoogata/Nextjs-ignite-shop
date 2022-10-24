@@ -12,10 +12,14 @@ interface NavProps {
 
 export const Nav = ({ show, closeNav }: NavProps) => {
 
-    const { cart, total } = useContext(PurchaseContext)
+    const { cart, total, cartCheckout } = useContext(PurchaseContext)
 
     const handleCloseNav = () => {
         closeNav();
+    }
+
+    const handleCartCheckout = () => {
+        cartCheckout()
     }
 
     return (
@@ -41,7 +45,7 @@ export const Nav = ({ show, closeNav }: NavProps) => {
                     <strong>Valor Total</strong>
                     <strong>{total}</strong>
                 </div>
-                <button><strong>Finalizar Compra</strong></button>
+                <button onClick={handleCartCheckout}><strong>Finalizar Compra</strong></button>
             </footer>
 
         </CartContainer>

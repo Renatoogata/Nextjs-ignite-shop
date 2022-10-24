@@ -1,5 +1,6 @@
-import { createContext, ReactNode, useEffect, useReducer } from "react";
+import { createContext, ReactNode, useEffect, useReducer, useState } from "react";
 
+import axios from 'axios';
 
 type ProductType = {
     imageUrl: string;
@@ -17,6 +18,7 @@ interface PurchaseContextProps {
     total: number;
     addToCart: (product: ProductType) => void;
     removeFromCart: (id: string) => void;
+    cartCheckout: () => void;
 }
 
 interface PurchaseContextProviderProps {
@@ -83,9 +85,30 @@ export const PurchaseProvider = ({
         })
     }
 
+    const cartCheckout = async () => {
+        const pricesId = cart.map((product: ProductType) => {
+            return {
+                price: product.defaultPriceId,
+                quantity: product.quantity,
+            }
+        })
+
+        try {
+            const response = await axios.post('/api/checkout', {
+                priceId: pricesId,
+            });
+            const { checkoutUrl } = response.data
+
+            window.location.href = checkoutUrl
+        } catch (error) {
+            alert(error.error)
+        }
+
+    }
+
     return (
         <PurchaseContext.Provider
-            value={{ cart, addToCart, total, removeFromCart }}
+            value={{ cart, addToCart, total, removeFromCart, cartCheckout }}
         >
             {children}
         </PurchaseContext.Provider>

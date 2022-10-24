@@ -8,13 +8,13 @@ import Head from "next/head";
 
 interface SuccessProps {
     customerName: string;
-    product: {
+    products: {
         name: string;
-        imageUrl: string;
-    }
+        images: string;
+    }[]
 }
 
-export default function Success({ customerName, product }: SuccessProps) {
+export default function Success({ customerName, products }: SuccessProps) {
     return (
         <>
             <Head>
@@ -26,12 +26,17 @@ export default function Success({ customerName, product }: SuccessProps) {
             <SuccessContainer>
                 <h1>Compra Efetuada</h1>
 
-                <ImageContainer>
-                    <Image src={product.imageUrl} width={120} height={110} alt="" />
-                </ImageContainer>
+
+                {products.map((product) => {
+                    return (
+                        <ImageContainer key={product.name}>
+                            <Image src={product.images[0]} width={120} height={110} alt="" />
+                        </ImageContainer>
+                    )
+                })}
 
                 <p>
-                    Uhul <strong>{customerName}</strong>, sua <strong>{product.name}</strong> ja está a caminho de sua casa
+                    Uhul <strong>{customerName}</strong>, suas compras ja foram efetuadas e estão a caminho de sua casa
                 </p>
 
                 <Link href='/'>
@@ -60,16 +65,16 @@ export const getServerSideProps: GetServerSideProps = async ({ query, params }) 
     })
 
     const customerName = session.customer_details.name;
-    const product = session.line_items.data[0].price.product as Stripe.Product
+    //const product = session.line_items.data[0].price.product as Stripe.Product (para 1 item)
+    const products = session.line_items.data.map((product) => {
+        return product.price.product as Stripe.Product;
+    });
 
 
     return {
         props: {
             customerName,
-            product: {
-                name: product.name,
-                imageUrl: product.images[0],
-            }
+            products,
         }
     }
 }

@@ -27,5 +27,17 @@ export const Cart = styled('div', {
 
     '&:hover': {
         opacity: 0.6
-    }
+    },
+
+    span: {
+        position: 'absolute',
+        marginTop: '-1rem',
+        marginLeft: '2rem',
+        borderRadius: '50%',
+        border: '2px solid $gray900',
+        backgroundColor: '$green500',
+        padding: 5,
+        lineHeight: 0.5,
+        fontSize: 'small',
+    },
 })

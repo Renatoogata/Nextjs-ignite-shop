@@ -7,9 +7,10 @@ import Image from "next/future/image";
 
 import { Cart, Container, Header } from "../styles/pages/app";
 import Link from "next/link";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { Nav } from "../components/cart";
 import { PurchaseProvider } from "../context/purchase";
+import { HeaderNumber } from "../components/headerNumber";
 
 globalStyles()
 
@@ -34,6 +35,7 @@ export default function App({ Component, pageProps }: AppProps) {
           </Link>
           <Cart onClick={handleOpenNav}>
             <Tote size={22} />
+            <HeaderNumber />
           </Cart>
           <Nav show={showNav} closeNav={closeNav} />
         </Header>
@@ -41,6 +43,7 @@ export default function App({ Component, pageProps }: AppProps) {
         <Component {...pageProps} />
       </PurchaseProvider>
     </Container>
+
   )
 }
 
